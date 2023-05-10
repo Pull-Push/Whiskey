@@ -11,6 +11,7 @@ def create_user():
         "email": request.form["email"],
         "birthday": request.form["birthday"],
         "password": request.form["password"],
+        "confirmPassword": request.form["confirmPassword"],
     };
 
     if not User.validate_user(request.form):
@@ -19,8 +20,8 @@ def create_user():
     user_id = User.save(data);
 
     session["user_id"] = user_id;
-    print("users line 22 ", session["user_id"]);
-    print("User created successfully!");
+    # print("users line 22 ", session["user_id"]);
+    # print("User created successfully!");
     return redirect("/dashboard");
 
 @app.route("/login/user", methods=["POST"])
@@ -28,16 +29,13 @@ def login_user():
     data = {
         "email": request.form["email"],
         "password": request.form["password"],
-    };
-
-    user = User.get_by_email(data);
-
-    if not user:
+    };    
+    if User.validate_log(data):
+        user = User.get_by_email(data);
+        session["user_id"] = user.id;
+        return redirect("/dashboard");
+    else:
         return redirect("/");
-
-    session["user_id"] = user.id;
-
-    return redirect("/dashboard");
 
 @app.route("/logout/user")
 def logout_user():

@@ -1,6 +1,9 @@
 from flask import flash
 from datetime import date, datetime
 from flask_app.config.mysqlconnection import connectToMySQL;
+import re
+EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
+NAME_REGEX = re.compile(r'[a-zA-Z\'.+_-]')
 
 class User:
     def __init__(self, data):
@@ -15,25 +18,30 @@ class User:
 
     @staticmethod
     def validate_user(user):
-        # print (user);
         is_valid = True;
         if len(user['firstName']) < 2:
-            flash("First name must be at least 2 characters.");
+            flash("First name must be at least 2 characters.",'regerr');
             is_valid = False;
         if len(user['lastName']) < 2:
-            flash("Last name must be at least 2 characters.");
+            flash("Last name must be at least 2 characters.",'regerr');
             is_valid = False;
         if len(user['email']) < 5:
-            flash("Email must be at least 5 characters.");
+            flash("Email must be at least 5 characters.",'regerr');
             is_valid = False;
         if len(user['password']) < 8:
-            flash("Password must be at least 8 characters.");
+            flash("Password must be at least 8 characters.",'regerr');
+            is_valid = False;
+        if user['password'] != user['confirmPassword']:
+            flash("Passwords do not match.",'regerr');
             is_valid = False;
         if user['birthday'] == "":
-            flash("Birthday must be entered.");
+            flash("Birthday must be entered.",'regerr');
             is_valid = False;
         
-        newBirthday = datetime.strptime(user['birthday'], "%Y-%m-%d");
+        if user['birthday'] == "":
+            newBirthday = datetime.today();
+        else:
+            newBirthday = datetime.strptime(user['birthday'], "%Y-%m-%d");
 
         #< This "should" convert the users birthday to be under or over 21   
         def calculate_age():
@@ -44,10 +52,33 @@ class User:
             return age;
         
         age = calculate_age();
-        
+        print(age);
         if age < 21:
-            flash("Must be 21 years or older to register.");
+            flash("Must be 21 years or older to register.", 'regerr');
             is_valid = False;
+        return is_valid;
+
+    @staticmethod
+    def validate_log(user):
+        is_valid = True;
+        data = {
+            "email": user['email'],
+            "password": user['password'],
+        };
+
+        if len(user['email']) == 0:
+            flash("Email is required.",'logerr');
+            is_valid = False;
+        if len(user['password']) == 0:
+            flash("Password is required.",'logerr');
+            is_valid = False;
+        if User.get_by_email(data)==False:
+            flash("Email not found.",'logerr');
+            is_valid = False;
+        elif not user['password'] == User.get_by_email(data).password:
+            flash("Password is incorrect.",'logerr');
+            is_valid = False;
+
         return is_valid;
 
     @classmethod
@@ -69,6 +100,7 @@ class User:
         query = "SELECT * FROM users WHERE email = %(email)s;";
         results = connectToMySQL('whiskeybarrel').query_db(query, data);
         if len(results) < 1:
+            print("No results");
             return False;
         return cls(results[0]);
 
@@ -84,7 +116,7 @@ class User:
     def get_user_whiskey(cls, data):
         query = "SELECT * FROM whiskies JOIN personalWhiskey ON whiskies.id = personalWhiskey.whiskeyId WHERE personalWhiskey.userId = %(id)s AND personalWhiskey.wishList = 0;";
         results = connectToMySQL('whiskeybarrel').query_db(query, data);
-        print(results);
+        # print(results);
         if len(results) < 1:
             return False;
         return results;
@@ -93,7 +125,7 @@ class User:
     def get_user_wish(cls, data):
         query = "SELECT * FROM whiskies JOIN personalWhiskey ON whiskies.id = personalWhiskey.whiskeyId WHERE personalWhiskey.userId = %(id)s AND personalWhiskey.wishList = 1";
         results = connectToMySQL('whiskeybarrel').query_db(query, data);
-        print(results);
+        # print(results);
         if len(results) < 1:
             return False;
         return results;
