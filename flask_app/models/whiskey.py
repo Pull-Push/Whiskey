@@ -40,8 +40,8 @@ class Whiskey:
         data['wishList'] = 0;
 
 
-        print("the whiskey id is",resultsMain)
-        print("the userid is",session['user_id'])
+        # print("the whiskey id is",resultsMain)
+        # print("the userid is",session['user_id'])
     
         queryPersonal = "INSERT INTO personalWhiskey (whiskeyId, userId, rating, dateTried, wishList, notes) VALUES (%(whiskeyId)s, %(userId)s,%(rating)s,%(dateTried)s, %(wishList)s,%(notes)s);"
         resultsPersonal = connectToMySQL('whiskeybarrel').query_db(queryPersonal, data);
@@ -57,8 +57,8 @@ class Whiskey:
         data['wishList'] = 1;
 
 
-        print("the whiskey id is",resultsMain)
-        print("the userid is",session['user_id'])
+        # print("the whiskey id is",resultsMain)
+        # print("the userid is",session['user_id'])
     
         queryPersonal = "INSERT INTO personalWhiskey (whiskeyId, userId, wishList, notes) VALUES (%(whiskeyId)s, %(userId)s,%(wishList)s, %(notes)s);"
         resultsPersonal = connectToMySQL('whiskeybarrel').query_db(queryPersonal, data);
@@ -102,25 +102,25 @@ class Whiskey:
     def validate_whiskey(whiskey):
         is_valid = True;
         if len(whiskey['name']) < 2:
-            flash("Name must be at least 2 characters.");
+            flash("Name must be at least 2 characters.",'whiskerr');
             is_valid = False;
         if len(whiskey['distiller']) < 2:
-            flash("Distiller must be at least 2 characters.");
+            flash("Distiller must be at least 2 characters.",'whiskerr');
             is_valid = False;
         if len(whiskey['country']) < 2:
-            flash("Country must be at least 2 characters.");
+            flash("Country must be at least 2 characters.",'whiskerr');
             is_valid = False;
         if len(whiskey['age']) < 1:
-            flash("Age must be at least 1 character.");
+            flash("Age must be at least 1 character.",'whiskerr');
             is_valid = False;
         if len(whiskey['proof']) < 1:
-            flash("Proof must be at least 1 character.");
+            flash("Proof must be at least 1 character.",'whiskerr');
             is_valid = False;
         if len(whiskey['price']) < 1:
-            flash("Price must be at least 1 character.");
+            flash("Price must be at least 1 character.",'whiskerr');
             is_valid = False;
         if len(whiskey['style']) < 2:
-            flash("Style must be at least 2 characters.");
+            flash("Style must be at least 2 characters.",'whiskerr');
             is_valid = False;
         return is_valid;
 

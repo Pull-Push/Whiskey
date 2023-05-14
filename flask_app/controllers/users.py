@@ -1,6 +1,5 @@
 from flask_app import app;
 from flask import render_template, redirect, request, session, Flask;
-
 from flask_app.models.user import User;
 
 @app.route("/create/user", methods=["POST"])
@@ -67,10 +66,10 @@ def wishlist():
         "id": session["user_id"],
     };
 
-    print("users line 71 userID", data);
+    # print("users line 71 userID", data);
     
     user = User.get_by_id(data);
     user_wish = User.get_user_wish(data);
-    print("users line 71 ", user_wish);
+    # print("users line 71 ", user_wish);
 
     return render_template("wishlist.html", user=user, wish=user_wish);

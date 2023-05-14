@@ -19,14 +19,17 @@ def create_whiskey():
     };
 
     if not Whiskey.validate_whiskey(request.form):
-        return redirect("/whiskey/new");
+        return redirect("/dashboard");
 
-    whiskey_id = Whiskey.save(data);
+    Whiskey.save(data);
 
     return redirect(f"/dashboard");
 
 @app.route("/create/wish", methods=["POST"])
 def create_wish():
+    if "user_id" not in session:
+        return redirect("/");
+    
     data = {
         "user_id": session["user_id"],
         "name": request.form["name"],
@@ -39,12 +42,18 @@ def create_wish():
         "notes": request.form["notes"],
     };
 
+    if not Whiskey.validate_whiskey(request.form):
+        print("Whiskey not validated");
+        return redirect("/wishlist");
+
     Whiskey.saveWish(data);
 
     return redirect("/wishlist");
 
 @app.route("/view/whiskey/<int:whiskey_id>")
 def view_whiskey(whiskey_id):
+    if "user_id" not in session:
+        return redirect("/");
     data = {
         "id": whiskey_id,
     };
@@ -55,6 +64,9 @@ def view_whiskey(whiskey_id):
 
 @app.route("/edit/whiskey/<int:whiskey_id>")
 def edit_whiskey(whiskey_id):
+    if "user_id" not in session:
+        return redirect("/");
+    
     data = {
         "id": whiskey_id,
     };
@@ -65,6 +77,9 @@ def edit_whiskey(whiskey_id):
 
 @app.route("/update/whiskey/<int:whiskey_id>", methods=["POST"])
 def update_whiskey(whiskey_id):
+    if "user_id" not in session:
+        return redirect("/");
+    
     data = {
         "name": request.form["name"],
         "distiller": request.form["distiller"],
@@ -85,11 +100,17 @@ def update_whiskey(whiskey_id):
         data['dateTried'] = "1000-01-01";
         data["rating"] = False;
     
-    whiskey = Whiskey.update(data);
+    if not Whiskey.validate_whiskey(request.form):
+        return redirect("/edit/whiskey/"+str(data['id']));
+
+    Whiskey.update(data);
     return redirect("/dashboard");
 
 @app.route("/delete/whiskey/<int:whiskey_id>")
 def delete_whiskey(whiskey_id):
+    if "user_id" not in session:
+        return redirect("/");
+    
     data = {
         "id": whiskey_id,
     };

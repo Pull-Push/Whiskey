@@ -50,7 +50,6 @@
                             <th>Age</th>
                             <th>Proof</th>
                             <th>Price</th>
-                            <th>Rating</th>
                         </tr>
                     </thead>
                     {% if wish == False %}
@@ -66,8 +65,7 @@
                             <td><a href="/view/whiskey/{{whiskey.id}}">{{whiskey.name}}</a> -  <br> {{whiskey.distiller}}</td>
                             <td>{{whiskey.age}}</td>
                             <td>{{whiskey.proof}}</td>
-                            <td>{{whiskey.price}}</td>
-                            <td>{{whiskey.rating}}</td>
+                            <td>${{whiskey.price}}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -77,6 +75,13 @@
                 <div class="col-6 darkback">
                     <h2>Add a Whiskey</h2>
                     <form action="/create/wish" method="post">
+                        {% with messages = get_flashed_messages(category_filter=["whiskerr"]) %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p class="text-danger">{{message}}</p>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
                         <div class="row justify-content-around">
                             <div class="col-6">
                                 <div class="mb-3">
@@ -89,7 +94,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="age" class="form-label">Age</label>
-                                    <input type="number" class="form-control" id="password" name="age">
+                                    <input type="number" class="form-control" id="password" name="age" min="0">
                                 </div>
                                 <div class="mb-3">
                                     <label for="country" class="form-label">Country</label>
@@ -98,7 +103,7 @@
                                 <div class="mb-3">
                                     <label for="style" class="form-label">Style</label>
                                     <select class="form-control" name="style" id="style">
-                                        <option value="default" disabled>Please Select A Style </option>
+                                        <option value="default" disabled selected="selected">Please Select A Style </option>
                                         <option value="Single Malt">Single Malt</option>
                                         <option value="Blended">Blended</option>
                                         <option value="Bourbon">Bourbon</option>
@@ -113,11 +118,11 @@
                             <div class="col-6">
                                 <div class="mb-3">
                                     <label for="proof" class="form-label">Proof</label>
-                                    <input type="number" class="form-control" id="proof" name="proof">
+                                    <input type="number" class="form-control" id="proof" name="proof" step="0.01">
                                 </div>
                                 <div class="mb-3">
                                     <label for="price" class="form-label">Price</label>
-                                    <input type="number" class="form-control" id="price" name="price">
+                                    <input type="number" class="form-control" id="price" name="price" step="0.01">
                                 </div>
                                 <div>
                                     <label for="notes" class="form-label">Notes</label>

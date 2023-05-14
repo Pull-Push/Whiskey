@@ -1,7 +1,9 @@
 from flask import flash
 from datetime import date, datetime
 from flask_app.config.mysqlconnection import connectToMySQL;
-import re
+import re;
+import bcrypt;
+
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 NAME_REGEX = re.compile(r'[a-zA-Z\'.+_-]')
 
@@ -75,10 +77,9 @@ class User:
         if User.get_by_email(data)==False:
             flash("Email not found.",'logerr');
             is_valid = False;
-        elif not user['password'] == User.get_by_email(data).password:
+        elif not bcrypt.checkpw(user['password'].encode(), User.get_by_email(data).password.encode()):
             flash("Password is incorrect.",'logerr');
             is_valid = False;
-
         return is_valid;
 
     @classmethod
@@ -92,6 +93,9 @@ class User:
 
     @classmethod
     def save(cls, data):
+        hashed_pw = bcrypt.hashpw(data['password'].encode(), bcrypt.gensalt()).decode();
+        data['password'] = hashed_pw;
+
         query = "INSERT INTO users (firstName, lastName, email, birthday, password) VALUES (%(firstName)s, %(lastName)s, %(email)s, %(birthday)s ,%(password)s);";
         return connectToMySQL('whiskeybarrel').query_db(query, data);
 

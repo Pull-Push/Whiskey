@@ -45,6 +45,13 @@
             <div class="col-6 justify-content-center darkback">
                 <h2>Edit a Whiskey</h2>
                 <form action="/update/whiskey/{{whiskey.id}}" method="post">
+                    {% with messages = get_flashed_messages(category_filter=["whiskerr"]) %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p class="text-danger">{{message}}</p>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
                     <div class="row">
                         <div class="col-6">
                             <div class="mb-3">
@@ -59,7 +66,7 @@
                             <div class="mb-3">
                                 <label for="age" class="form-label">Age</label>
                                 <input type="number" class="form-control" id="password" name="age"
-                                    value="{{whiskey.age}}">
+                                    value="{{whiskey.age}}" min="0">
                             </div>
                             <div class="mb-3">
                                 <label for="country" class="form-label">Country</label>
@@ -104,17 +111,17 @@
                             <div class="mb-3">
                                 <label for="proof" class="form-label">Proof</label>
                                 <input type="number" class="form-control" id="proof" name="proof"
-                                    value="{{whiskey.proof}}">
+                                    value="{{whiskey.proof}}" step="0.01" >
                             </div>
                             <div class="mb-3">
                                 <label for="price" class="form-label">Price</label>
                                 <input type="number" class="form-control" id="price" name="price"
-                                    value="{{whiskey.price}}">
+                                    value="{{whiskey.price}}" step="0.01">
                             </div>
                             <div class="mb-3">
                                 <label for="rating" class="form-label">Rating</label>
                                 <input type="number" class="form-control" id="rating" name="rating"
-                                    value="{{whiskey.rating}}">
+                                    value="{{whiskey.rating}}" step="0.01">
                             </div>
                             <div>
                                 <label for="notes" class="form-label">Notes</label>
