@@ -1,6 +1,5 @@
 from flask_app import app;
 from flask import jsonify, render_template, redirect, request, session, Flask;
-
 from flask_app.models.whiskey import Whiskey;
 
 @app.route("/create/whiskey", methods=["POST"])
@@ -16,12 +15,16 @@ def create_whiskey():
         "price": request.form["price"],
         "rating": request.form["rating"],
         "notes": request.form["notes"],
+        "photo": request.form["photo"]
     };
 
     if not Whiskey.validate_whiskey(request.form):
         return redirect("/dashboard");
 
     Whiskey.save(data);
+    print(data["photo"].rsplit('/', 1)[-1])
+
+
 
     return redirect(f"/dashboard");
 
@@ -40,6 +43,7 @@ def create_wish():
         "proof": request.form["proof"],
         "price": request.form["price"],
         "notes": request.form["notes"],
+        "photo": request.form["photo"]
     };
 
     if not Whiskey.validate_whiskey(request.form):
@@ -59,7 +63,6 @@ def view_whiskey(whiskey_id):
     };
 
     whiskey = Whiskey.get_by_id(data);
-
     return render_template("view.html", whiskey=whiskey);
 
 @app.route("/edit/whiskey/<int:whiskey_id>")
@@ -92,6 +95,7 @@ def update_whiskey(whiskey_id):
         "rating": request.form["rating"],
         "notes": request.form["notes"],
         "wishList": request.form["wishList"],
+        "photo": request.form["photo"],
         "id": whiskey_id,
         "userId": session["user_id"]
     };

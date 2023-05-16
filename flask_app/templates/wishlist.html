@@ -23,14 +23,14 @@
                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link disabled" href="#">Wish List</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="/dashboard">The Shelf</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/ww">Whiskey Wednesday</a>
+                            <a class="nav-link disabled" href="/wishlist">Wish List</a>
                         </li>
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" href="/ww">Whiskey Wednesday</a>
+                        </li> -->
                         <li class="nav-item">
                             <a class="nav-link" href="/logout/user">Log Out</a>
                         </li>
@@ -73,7 +73,7 @@
                 </table>
             </div>
                 <div class="col-6 darkback">
-                    <h2>Add a Whiskey</h2>
+                    <h2>Add a Whiskey to the Wish List</h2>
                     <form action="/create/wish" method="post">
                         {% with messages = get_flashed_messages(category_filter=["whiskerr"]) %}
                     {% if messages %}
@@ -123,6 +123,10 @@
                                 <div class="mb-3">
                                     <label for="price" class="form-label">Price</label>
                                     <input type="number" class="form-control" id="price" name="price" step="0.01">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="photo" class="form-label">Imgur URL:</label>
+                                    <input type="text" class="form-control" id="photo" name="photo">
                                 </div>
                                 <div>
                                     <label for="notes" class="form-label">Notes</label>

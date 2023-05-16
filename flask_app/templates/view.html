@@ -29,9 +29,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/wishlist">Wish List</a>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a class="nav-link" href="#">Whiskey Wednesday</a>
-                        </li>
+                        </li> -->
                         <li class="nav-item">
                             <a class="nav-link" href="/logout/user">Log Out</a>
                         </li>
@@ -49,7 +49,7 @@
                     <h3>Age: {{whiskey.age}}</h3>
                     <h3>Country: {{whiskey.country}}</h3>
                     <h3>Proof: {{whiskey.proof}}</h3>
-                    <h3>Price: {{whiskey.price}}</h3>
+                    <h3>Price: ${{whiskey.price}}</h3>
                     <h3>Style: {{whiskey.style}}</h3>
                     
                     {% if whiskey.rating == None or whiskey.rating == 0  %}
@@ -71,14 +71,17 @@
                 <button class="btn btn-danger" onclick="window.location.href='/delete/whiskey/{{whiskey.id}}'">Delete</button>
             </div>
             <div class="right">
-
+                <blockquote class="imgur-embed-pub" lang="en" data-id="{{whiskey.photo}}">
+                    <a href="https://imgur.com/{{whiskey.photo}}">View post on imgur.com</a>
+                    <script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+                </blockquote>
             </div>
         </div>
-
+        
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-    crossorigin="anonymous"></script>
+integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+crossorigin="anonymous"></script>
 
 </html>

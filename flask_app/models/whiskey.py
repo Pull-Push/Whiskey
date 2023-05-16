@@ -14,6 +14,7 @@ class Whiskey:
         self.price = data['price'];
         self.style = data['style'];
         self.rating = data['rating'];
+        self.photo = data['photo'];
         self.notes = data['notes'];
         self.dateTried = data['dateTried'];
         self.createdAt = data['createdAt'];
@@ -38,12 +39,13 @@ class Whiskey:
         data['whiskeyId'] = resultsMain;
         data['userId'] = session['user_id'];
         data['wishList'] = 0;
+        data['photo'] = data['photo'].rsplit('/',1)[1];
 
 
         # print("the whiskey id is",resultsMain)
         # print("the userid is",session['user_id'])
     
-        queryPersonal = "INSERT INTO personalWhiskey (whiskeyId, userId, rating, dateTried, wishList, notes) VALUES (%(whiskeyId)s, %(userId)s,%(rating)s,%(dateTried)s, %(wishList)s,%(notes)s);"
+        queryPersonal = "INSERT INTO personalWhiskey (whiskeyId, userId, rating, dateTried, wishList ,photo, notes) VALUES (%(whiskeyId)s, %(userId)s,%(rating)s,%(dateTried)s, %(wishList)s,%(photo)s,%(notes)s);"
         resultsPersonal = connectToMySQL('whiskeybarrel').query_db(queryPersonal, data);
         return resultsPersonal;
 
@@ -60,7 +62,7 @@ class Whiskey:
         # print("the whiskey id is",resultsMain)
         # print("the userid is",session['user_id'])
     
-        queryPersonal = "INSERT INTO personalWhiskey (whiskeyId, userId, wishList, notes) VALUES (%(whiskeyId)s, %(userId)s,%(wishList)s, %(notes)s);"
+        queryPersonal = "INSERT INTO personalWhiskey (whiskeyId, userId, wishList, photo ,notes) VALUES (%(whiskeyId)s, %(userId)s,%(wishList)s,%(photo)s,%(notes)s);"
         resultsPersonal = connectToMySQL('whiskeybarrel').query_db(queryPersonal, data);
         return resultsPersonal;
 
@@ -75,15 +77,13 @@ class Whiskey:
     def update(cls, data):
 
         query = "UPDATE whiskies SET name = %(name)s, distiller = %(distiller)s, country = %(country)s, age = %(age)s, proof = %(proof)s, price = %(price)s, style = %(style)s WHERE id = %(id)s;"
-        personalQuery = "UPDATE personalWhiskey SET wishList=%(wishList)s,rating = %(rating)s, notes = %(notes)s, dateTried = %(dateTried)s WHERE whiskeyId = %(id)s AND userId = %(userId)s;"
-
-        print("the rating is",data['rating'])
+        personalQuery = "UPDATE personalWhiskey SET wishList=%(wishList)s,rating = %(rating)s, photo = %(photo)s ,notes = %(notes)s, dateTried = %(dateTried)s WHERE whiskeyId = %(id)s AND userId = %(userId)s;"
 
         results = connectToMySQL('whiskeybarrel').query_db(query, data);
         personalResults = connectToMySQL('whiskeybarrel').query_db(personalQuery, data);
 
-        print("the whiskey id is",results)
-        print("the userid is",session['user_id'])
+        # print("the whiskey id is",results)
+        # print("the userid is",session['user_id'])
 
         return results
 
