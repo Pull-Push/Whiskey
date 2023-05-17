@@ -119,8 +119,8 @@ class Whiskey:
         if len(whiskey['price']) < 1:
             flash("Price must be at least 1 character.",'whiskerr');
             is_valid = False;
-        if len(whiskey['style']) < 2:
-            flash("Style must be at least 2 characters.",'whiskerr');
+        if (whiskey['style']) == "default":
+            flash("Style must be Selected.",'whiskerr');
             is_valid = False;
         return is_valid;
 
